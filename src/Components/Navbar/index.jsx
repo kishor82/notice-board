@@ -11,13 +11,13 @@ export const NavBar = () => {
   const Close = () => setClick(false);
 
   return (
-    <div>
+    <div className="navbar_wrapper">
       <div className={click ? "main-container" : ""} onClick={() => Close()} />
       <nav className="navbar">
         <div className="nav-container">
           <NavLink to="/dashboard" className="nav-logo">
             Notice Bee 🐝
-            <i class="fa-solid fa-clipboard"></i>
+            {/* <i class="fa-solid fa-clipboard"></i> */}
           </NavLink>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
             <li className="nav-item">

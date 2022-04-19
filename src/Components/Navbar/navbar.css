@@ -1,4 +1,3 @@
-@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
 .pages {
   color: #316685;
   text-align: center;
@@ -140,4 +139,11 @@
     cursor: pointer;
     color: #ffdd40;
   }
+}
+
+.navbar_wrapper {
+  position: sticky;
+  top: 0px;
+  z-index: 2;
+  align-self: start;
 }
