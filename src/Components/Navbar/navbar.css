@@ -15,6 +15,7 @@
   position: sticky;
   top: 0;
   z-index: 20;
+  border-bottom: 4px solid #f5b921;
 }
 
 .nav-container {
@@ -104,12 +105,12 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    border-top: 1pxsolid #fff;
     position: absolute;
     top: 80px;
     left: -110%;
     opacity: 1;
     transition: all 0.5s ease;
+    border-bottom: 4px solid #f5b921;
   }
 
   .nav-menu.active {
@@ -124,17 +125,12 @@
     border: none;
   }
   .nav-links {
-    padding: 1.5rem;
     width: 100%;
-    display: table;
   }
 
   .nav-icon {
     display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(-100%, 60%);
+    margin-right: 20px;
     font-size: 1.8rem;
     cursor: pointer;
     color: #ffdd40;

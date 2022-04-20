@@ -1,8 +1,15 @@
+import { useState } from "react";
 import { useAuth } from "../../utils/AuthProvider";
 import Card from "../Card";
+import Search from "../Search";
+import Modal from "../Modal";
 import "./index.css";
 export const Dashboard = () => {
   const { token } = useAuth();
+  const [isOpen, setIsModalOpen] = useState(false);
+  const tootgleModal = () => {
+    setIsModalOpen((value) => !value);
+  };
   const data = [
     {
       image: "http://placeimg.com/400/200/animals",
@@ -72,8 +79,15 @@ export const Dashboard = () => {
     <section>
       <div className="item_container">
         <div className="grid_item dashboard_aside">
-        <div className="icon"><i className="fa-solid fa-user"></i></div>
-          Authenticated as {token}, Dashboard (Protected)
+          <div className="aside_items">
+            <div className="icon">
+              <i className="fa-solid fa-user"></i>
+            </div>
+            Authenticated as {token}, Dashboard (Protected)
+          </div>
+          <div className="aside_items search_container">
+            <Search />
+          </div>
         </div>
         <div className="grid_item">
           <div className="card_container">
@@ -91,6 +105,14 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
+      <div id="add_button">
+        <button class="add_notice" onClick={tootgleModal}>
+          <i class="fa-solid fa-circle-plus"></i>
+        </button>
+      </div>
+      <Modal isOpen={isOpen} toggleModal={tootgleModal}>
+        <h4>Add/Edit Notice content here</h4>
+      </Modal>
     </section>
   );
 };

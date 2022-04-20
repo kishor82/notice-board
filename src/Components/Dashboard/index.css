@@ -12,38 +12,34 @@
   color: #fff;
   font-size: 20px;
   padding: 20px;
-  border: #1f5156 1px solid;
   border-radius: 5px;
 }
 
 .dashboard_aside {
+  position: -webkit-sticky;
   position: sticky;
   top: 120px;
   align-self: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background: transparent;
+  border: none;
 }
 
-@media (max-width: 500px) {
-  .dashboard_aside {
-    position: inherit;
-  }
-  .item_container {
-    margin: 40px auto;
-    padding: 0px;
-    grid-template-columns: 1fr;
-  }
-  .grid_item {
-    background: #1f5156;
-    color: #fff;
-    font-size: 20px;
-    padding: 5px;
-    border: #1f5156 1px solid;
-  }
+.aside_items {
+  border: 2px solid black;
+  margin: 10px 0px;
+  width: 100%;
+  padding: 10px;
+  background: #1f5156;
+  border: #1f5156 1px solid;
+  border-radius: 5px;
 }
-
 .icon {
   font-size: 40px;
   width: 6rem;
-  margin-top: calc(5rem / -2 - 1rem);
+  margin-top: calc(4rem / -2 - 1rem);
   aspect-ratio: 1;
   background-color: #f5b921;
   justify-self: center;
@@ -51,4 +47,71 @@
   display: grid;
   place-items: center;
   border: 2px solid #1f5156;
+}
+
+@media (max-width: 950px) {
+  .dashboard_aside {
+    top: -115px;
+    z-index: 1;
+  }
+  .item_container {
+    margin: 40px auto;
+    padding: 0px;
+    grid-template-columns: 1fr;
+  }
+  .grid_item {
+    padding: 5px;
+  }
+
+  .aside_items {
+    border: none;
+  }
+
+  .search_container {
+    border: none;
+    border-bottom: 3px solid #f8dd30 !important;
+  }
+}
+
+.add_notice {
+  background: transparent;
+  color: #f5b921;
+  border: none;
+  font-size: 60px;
+}
+
+#add_button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  border-radius: 50%;
+}
+
+#add_button i {
+  background: #1f5156;
+  border-radius: 50%;
+  /* border: 3px solid #1f5156; */
+  cursor: pointer;
+  box-shadow: 0 4px 0 #1f5156, 0 5px 15px -4px #000;
+  transition: box-shadow 0.2s ease-in-out, margin-top 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
+}
+
+#add_button:hover,
+#add_button:focus i {
+  opacity: 0.9;
+  outline: 0;
+}
+
+#add_button:active i {
+  box-shadow: none;
+  margin-top: 4px;
+  transform: scale(0.9);
+}
+@media (min-width: 1540px) {
+  #add_button {
+    bottom: 40px;
+    right: 180px;
+  }
 }

@@ -13,6 +13,15 @@ export const AuthProvider = ({ children }) => {
   const location = useLocation();
   const [token, setToken] = useState(null);
 
+  const companies = ["Amazon", "Google", "Apple", "Microsoft"];
+  const departments = ["IT", "HR", "Customer Success"];
+  const permission = {
+    Admin: "All",
+    User: "Read Only",
+    "User/w": "Read/Write",
+  };
+  const roles = ["Admin", "User", "User/w"];
+
   const handleLogin = async () => {
     const token = await fakeAuth();
     setToken(token);
@@ -26,6 +35,10 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     token,
+    companies,
+    departments,
+    permission,
+    roles,
     onLogin: handleLogin,
     onLogout: handleLogout,
   };

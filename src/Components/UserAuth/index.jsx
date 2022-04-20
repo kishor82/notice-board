@@ -1,11 +1,9 @@
 import { useRef, useState } from "react";
 import { useAuth } from "../../utils/AuthProvider";
 import "./userAuth.css";
-const companies = ["Amazon", "Google", "Apple", "Microsoft"];
-const departments = ["IT", "HR", "Customer Success"];
 export const UserAuth = () => {
   const inputEl = useRef(null);
-  const { onLogin } = useAuth();
+  const { onLogin, companies, departments } = useAuth();
   const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [registerData, setRegisterData] = useState({
     email: "",
@@ -61,6 +59,7 @@ export const UserAuth = () => {
               <input
                 type="text"
                 name="username"
+                required
                 value={loginData.username}
                 onChange={handleLoginChange}
                 placeholder="Username"
@@ -68,6 +67,7 @@ export const UserAuth = () => {
               <input
                 type="password"
                 name="password"
+                required
                 value={loginData.password}
                 onChange={handleLoginChange}
                 placeholder="Password"
@@ -95,6 +95,7 @@ export const UserAuth = () => {
               <h2>Create an account</h2>
               <input
                 type="email"
+                required
                 name="email"
                 onChange={handleRegisterChange}
                 placeholder="Email Address"
@@ -130,12 +131,14 @@ export const UserAuth = () => {
               <input
                 type="password"
                 name="password"
+                required
                 placeholder="Create Password"
                 onChange={handleRegisterChange}
               />
               <input
                 type="password"
                 name="confirm_password"
+                required
                 placeholder="Confirm Password"
                 onChange={handleRegisterChange}
               />

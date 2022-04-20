@@ -6,6 +6,13 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 
 html {
   scroll-behavior: smooth;
@@ -19,4 +26,8 @@ section {
   justify-content: center;
   align-items: center;
   padding: 20px;
+}
+
+button {
+  border-radius: 5px;
 }
