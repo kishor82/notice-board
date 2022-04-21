@@ -17,7 +17,7 @@ export const NavBar = () => {
         <div className="nav-container">
           <NavLink to="/dashboard" className="nav-logo">
             Notice Bee 🐝
-            {/* <i class="fa-solid fa-clipboard"></i> */}
+            {/* <i className="fa-solid fa-clipboard"></i> */}
           </NavLink>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
             <li className="nav-item">

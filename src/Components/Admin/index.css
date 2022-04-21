@@ -30,7 +30,7 @@
 .edit_form {
   position: relative;
   height: 100%;
-  background: #fff;
+  background:#fff8e5;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,6 +85,21 @@
 }
 
 .edit_form form select {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  background: #f5f5f5;
+  color: #333;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 12px 0;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+
+.edit_form form textarea {
   position: relative;
   width: 100%;
   padding: 10px;
@@ -222,4 +237,19 @@
   font-size: 13px;
   color: #aaa;
   font-style: normal;
+}
+
+.input-group span + label {
+  top: 3px;
+  font-size: 13px;
+  color: #aaa;
+  font-style: normal;
+}
+
+.admin_section {
+  align-items: baseline;
+}
+
+select[readonly] {
+  pointer-events:none;
 }

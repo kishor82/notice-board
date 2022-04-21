@@ -5,11 +5,11 @@ import {
   Navigate,
   Routes,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "./utils/AuthProvider";
 import { ProtectedRoute, LoginRoute } from "./utils/ProtectedRoutes";
 import { Dashboard } from "./Components/Dashboard";
 import { Admin } from "./Components/Admin";
-
 function App() {
   return (
     <Router>
@@ -42,6 +42,18 @@ function App() {
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="colored"
+        pauseOnHover
+      />
     </Router>
   );
 }

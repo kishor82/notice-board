@@ -1,4 +1,7 @@
 function SortData(newData, sortBy, direction) {
+  if (!sortBy || !newData[0][sortBy]) {
+    return newData;
+  }
   return newData.sort(function (a, b) {
     if (typeof a[sortBy] == "number") {
       if (direction === "DESC") {
@@ -28,6 +31,6 @@ function SortData(newData, sortBy, direction) {
         return 0;
       }
     }
-  });
+  }).splice(0, 5);
 }
 export default SortData;

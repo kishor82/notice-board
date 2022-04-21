@@ -12,7 +12,7 @@ function Modal({ children, isOpen, toggleModal, type, onCancel, onConfirm }) {
         >
           {type !== "alert" && (
             <a className="close-modal" onClick={toggleModal}>
-              <i class="fa-solid fa-circle-xmark"></i>
+              <i className="fa-solid fa-circle-xmark"></i>
             </a>
           )}
 

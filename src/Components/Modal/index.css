@@ -35,7 +35,7 @@
   justify-content: center;
   position: relative;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: #fff8e5;
   padding: 1rem;
   border-radius: 3px;
   opacity: 0;
@@ -46,7 +46,7 @@
   backface-visibility: hidden;
   transform: scale(1.2);
   z-index: 3;
-  transition: all 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .full_modal {
@@ -62,8 +62,8 @@
   opacity: 0;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transition: opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1),
-    transform 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: opacity 0.2s cubic-bezier(0.55, 0, 0.1, 1),
+    transform 0.2s cubic-bezier(0.55, 0, 0.1, 1);
   transition-delay: 0.3s;
   font-size: 27px;
   color: #677eff;
@@ -74,7 +74,7 @@
   opacity: 0;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transition: opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: opacity 0.2s cubic-bezier(0.55, 0, 0.1, 1);
   transition-delay: 0.3s;
 }
 .modal.active {

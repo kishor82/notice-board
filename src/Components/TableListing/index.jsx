@@ -4,6 +4,11 @@ import "./index.css";
 
 const TableListing = ({ sortBy, direction = "DESC", data, columns = [] }) => {
   const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    setTableData(SortData(data, sortBy, direction));
+  }, []);
+
   const TableRow = ({ rowData, index }) => {
     return (
       <tr key={`table-${index}`}>
@@ -12,7 +17,7 @@ const TableListing = ({ sortBy, direction = "DESC", data, columns = [] }) => {
             return (
               <td key={`table-td-${index}-${innerIndex}`}>
                 <b>{currentRow.title}</b>
-                {currentRow.render(rowData)}
+                {currentRow.render(rowData, index)}
               </td>
             );
           } else {
@@ -28,14 +33,10 @@ const TableListing = ({ sortBy, direction = "DESC", data, columns = [] }) => {
     );
   };
 
-  useEffect(() => {
-    setTableData(SortData(data, sortBy, direction));
-  }, []);
-
   return (
     <div>
       <table id="balanceTable0" className="respTable">
-        <thead>
+        <thead className="table_head">
           <tr className="top">
             {columns.map((column, index) => (
               <th key={`${column.title}-${index}`} align="left">

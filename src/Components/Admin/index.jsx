@@ -1,155 +1,15 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import TableListing from "../TableListing";
 import Modal from "../Modal";
 import "./index.css";
 import { useAuth } from "../../utils/AuthProvider";
+import data from "../../MOCK_DATA.json";
 
-const data = [
-  {
-    planYear: 2016,
-    desc: "In-Network Deductible",
-    type: "Individual",
-    current: 469.62,
-    max: 1000,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Out-of-Pocket",
-    type: "Individual",
-    current: 834.98,
-    max: 1500,
-  },
-  {
-    planYear: 2016,
-    desc: "Out-of-Network Deductible",
-    type: "Family",
-    current: 203.41,
-    max: 3000,
-  },
-  {
-    planYear: 2017,
-    desc: "In-Network Deductible",
-    type: "Individual",
-    current: 568.91,
-    max: 3000,
-  },
-  {
-    planYear: 2017,
-    desc: "In-Network Out-of-Pocket",
-    type: "Family",
-    current: 34.48,
-    max: 1000,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Deductible",
-    type: "Family",
-    current: 334.58,
-    max: 1000,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Out-of-Pocket",
-    type: "Family",
-    current: 792.09,
-    max: 1500,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Deductible",
-    type: "Individual",
-    current: 269.64,
-    max: 3000,
-  },
-  {
-    planYear: 2016,
-    desc: "Out-of-Network Deductible",
-    type: "Family",
-    current: 321.46,
-    max: 1000,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Deductible",
-    type: "Individual",
-    current: 393.79,
-    max: 1000,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Out-of-Pocket",
-    type: "Individual",
-    current: 284.33,
-    max: 1000,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Out-of-Pocket",
-    type: "Individual",
-    current: 504.29,
-    max: 1500,
-  },
-  {
-    planYear: 2016,
-    desc: "In-Network Out-of-Pocket",
-    type: "Individual",
-    current: 554.94,
-    max: 3000,
-  },
-  {
-    planYear: 2016,
-    desc: "In-Network Deductible",
-    type: "Family",
-    current: 255.86,
-    max: 1000,
-  },
-  {
-    planYear: 2016,
-    desc: "In-Network Deductible",
-    type: "Individual",
-    current: 254.34,
-    max: 1500,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Deductible",
-    type: "Individual",
-    current: 693.35,
-    max: 1000,
-  },
-  {
-    planYear: 2017,
-    desc: "In-Network Out-of-Pocket",
-    type: "Family",
-    current: 674.62,
-    max: 3000,
-  },
-  {
-    planYear: 2016,
-    desc: "In-Network Deductible",
-    type: "Individual",
-    current: 803.1,
-    max: 3000,
-  },
-  {
-    planYear: 2016,
-    desc: "In-Network Out-of-Pocket",
-    type: "Family",
-    current: 181.98,
-    max: 1500,
-  },
-  {
-    planYear: 2017,
-    desc: "Out-of-Network Deductible",
-    type: "Individual",
-    current: 871.33,
-    max: 3000,
-  },
-];
 export const Admin = () => {
   const [iseditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const { companies, departments, permission, roles } = useAuth();
+  const { departments, permission, roles } = useAuth();
   const [editUser, setEditUser] = useState({
     email: "existing@emai.com",
     company: "Apple",
@@ -158,6 +18,52 @@ export const Admin = () => {
     permission: "",
     role: "User",
   });
+
+  const columns = [
+    { title: "Company", value: "company" },
+    { title: "Email", value: "email" },
+    { title: "Department", value: "department" },
+    { title: "Role", value: "role" },
+    {
+      title: "Acknowledge",
+      render: function (item) {
+        const percent = Math.round((item.acknowledged / 1000) * 100);
+        return (
+          <div
+            className="balance"
+            style={{
+              background: `linear-gradient(to right, #f5b921 ${percent}%, #f2f2f2 ${percent}%)`,
+            }}
+          >
+            {percent} %
+          </div>
+        );
+      },
+    },
+    {
+      title: "Actions",
+      render: function (item, index) {
+        return (
+          <div className="action">
+            <button
+              type="button"
+              onClick={(e) => handleEditClick(e, item, index)}
+              className="edit_button"
+            >
+              <i className="fa-solid fa-pen-circle"></i>
+            </button>
+            <button
+              type="button"
+              onClick={(e) => handleDeleteClick(e, item, index)}
+              className="delete_button"
+            >
+              <i className="fa-solid fa-circle-trash"></i>
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
 
   const toogleDeleteModal = () => {
     setIsDeleteModalOpen((value) => !value);
@@ -179,68 +85,37 @@ export const Admin = () => {
       };
     });
   }, [editUser.role]);
-  const handleEdit = (e, item) => {
+
+  const handleEditClick = (e, item) => {
     e.preventDefault();
     setIsEditModalOpen((value) => !value);
-    console.log("><><><>Edit", item);
+    setEditUser(() => {
+      return {
+        ...editUser,
+        ...item,
+      };
+    });
   };
 
-  const handleDelete = (e, item) => {
+  const handleDeleteClick = (e, item) => {
     e.preventDefault();
-    console.log("Delete", { item });
     toogleDeleteModal();
   };
-  const columns = [
-    { title: "Plan Year", value: "planYear" },
-    { title: "Description", value: "desc" },
-    { title: "Type", value: "type" },
-    { title: "Current", value: "current" },
-    { title: "Maximum", value: "max" },
-    {
-      title: "Acknowledge",
-      render: function (item) {
-        const max = item.max.toFixed(2);
-        const percent = Math.round((item.current / max) * 100);
-        return (
-          <div
-            className="balance"
-            style={{
-              background: `linear-gradient(to right, #f5b921 ${percent}%, #f2f2f2 ${percent}%)`,
-            }}
-          >
-            {percent} %
-          </div>
-        );
-      },
-    },
-    {
-      title: "Actions",
-      render: function (item) {
-        return (
-          <div className="action">
-            <button
-              type="button"
-              onClick={(e) => handleEdit(e, item)}
-              className="edit_button"
-            >
-              <i className="fa-solid fa-pen-circle"></i>
-            </button>
-            <button
-              type="button"
-              onClick={(e) => handleDelete(e, item)}
-              className="delete_button"
-            >
-              <i className="fa-solid fa-circle-trash"></i>
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
+  const handleConfirmDelete = (e, item) => {
+    e.preventDefault();
+    toast.success("User Deleted Successfully.");
+    toogleDeleteModal();
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    toast.success("User Edited Successfully.");
+    setIsEditModalOpen(false);
+  };
 
   return (
-    <section>
-      <TableListing columns={columns} data={data} sortBy="current" />
+    <section className="admin_section">
+      <TableListing columns={columns} data={data} sortBy="company" />
       <Modal
         isOpen={iseditModalOpen}
         toggleModal={() => setIsEditModalOpen((value) => !value)}
@@ -248,7 +123,7 @@ export const Admin = () => {
         <div className="edit_form">
           <form>
             <h2>Edit User</h2>
-            <div class="input-group">
+            <div className="input-group">
               <input
                 type="email"
                 name="email"
@@ -258,21 +133,17 @@ export const Admin = () => {
               />
               <label>Email Address</label>
             </div>
-            <div class="input-group">
-              <select
+            <div className="input-group">
+              <input
+                type="text"
+                name="company"
                 value={editUser.company}
                 onChange={handleEditChange}
-                name="company"
-              >
-                {companies.map((company, index) => (
-                  <option key={index} value={company}>
-                    {company}
-                  </option>
-                ))}
-              </select>
+                readOnly
+              />
               <label>Company</label>
             </div>
-            <div class="input-group">
+            <div className="input-group">
               <select
                 value={editUser.department}
                 onChange={handleEditChange}
@@ -289,7 +160,7 @@ export const Admin = () => {
               </select>
               <label>Department</label>
             </div>
-            <div class="input-group">
+            <div className="input-group">
               <select
                 value={editUser.role}
                 onChange={handleEditChange}
@@ -328,15 +199,15 @@ export const Admin = () => {
                     });
                   }}
                 />
-                <i class="switch__icon"></i>
-                <span class="switch__span">
+                <i className="switch__icon"></i>
+                <span className="switch__span">
                   {editUser.status ? "Active" : "Deactive"}
                 </span>
                 <label>Status</label>
               </div>
             </label>
 
-            <button type="button" onClick={() => console.log(editUser)}>
+            <button type="button" onClick={handleEdit}>
               Save
             </button>
           </form>
@@ -346,8 +217,8 @@ export const Admin = () => {
         isOpen={isDeleteModalOpen}
         toggleModal={toogleDeleteModal}
         type="alert"
-        onCancel={() => setIsDeleteModalOpen(false)}
-        onConfirm={() => toogleDeleteModal()}
+        onCancel={toogleDeleteModal}
+        onConfirm={handleConfirmDelete}
       >
         <h4>Are you sure you want delete this user? </h4>
       </Modal>

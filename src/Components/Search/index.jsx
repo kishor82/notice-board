@@ -28,7 +28,7 @@ const Search = () => {
         onKeyDown={handleKeypress}
       />
       <button className="search_icon" type="submit" onClick={handleSearch}>
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <i className="fa-solid fa-magnifying-glass"></i>
       </button>
     </div>
   );
