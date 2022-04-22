@@ -1,7 +1,15 @@
 import React from "react";
 import "./index.css";
 
-const Card = ({ title, notice, date, onEdit, index }) => {
+const Card = ({
+  acknowledge,
+  title,
+  notice,
+  date,
+  onEdit,
+  onAcknowledge,
+  index,
+}) => {
   return (
     <div className="card" href="#">
       <span className="card-header">
@@ -19,7 +27,26 @@ const Card = ({ title, notice, date, onEdit, index }) => {
         </span>
       </span>
       <span className="card-summary">{notice}</span>
-      <span className="card-meta">Published: {date}</span>
+      <span className="card-meta">
+        <span>
+          <i class="fa-solid fa-clock"></i> &nbsp; {date}
+        </span>
+        <span>
+          {acknowledge ? (
+            <span className="acknowledged">
+              <i className="fa-solid fa-clipboard-check"></i>
+            </span>
+          ) : (
+            <button
+              type="button"
+              onClick={() => onAcknowledge({ index })}
+              className="acknowledge_button"
+            >
+              Acknowledge
+            </button>
+          )}
+        </span>
+      </span>
     </div>
   );
 };

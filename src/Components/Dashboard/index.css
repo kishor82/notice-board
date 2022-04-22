@@ -17,13 +17,13 @@
 
 .dashboard_aside {
   position: -webkit-sticky;
-  position: sticky;
+  /* position: sticky; */
   top: 120px;
   align-self: start;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  background: transparent;
+  background: #f8dd30;
   border: none;
 }
 
@@ -47,6 +47,34 @@
   display: grid;
   place-items: center;
   border: 2px solid #1f5156;
+}
+
+.department_options select {
+  width: 100%;
+  border: none;
+  height: 30px;
+  background: transparent;
+  outline: none;
+  color: #fff8e55f;
+  opacity: 1; /* Firefox */
+  font-size: 17px;
+}
+
+.department_options select option {
+  color: inherit;
+  background-color: #1f5156;
+}
+
+.department_options select:focus {
+  outline: none;
+}
+.department_options select::-ms-expand {
+  display: none;
+}
+
+.department_options {
+  margin-bottom: -2px;
+  border-bottom: 1px solid #f5b921;
 }
 
 @media (max-width: 950px) {

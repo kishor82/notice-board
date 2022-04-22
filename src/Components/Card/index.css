@@ -33,9 +33,7 @@
     /* max-width: 320px; */
     margin-right: 20px;
     margin-bottom: 20px;
-  }
-  .card:nth-child(even) {
-    margin-right: 0;
+    margin-right: 0px;
   }
 }
 
@@ -71,8 +69,31 @@
   color: #666;
   font-size: 0.78em;
   padding: 5%;
-  position: absolute;
+  /* position: absolute; */
   bottom: 0px;
+}
+
+.card-meta {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.acknowledge_button {
+  padding: 8px;
+  background: #677eff;
+  color: #fefff9;
+  border: none;
+}
+
+.acknowledge_button:hover {
+  transform: scale(1.1);
+}
+
+.acknowledged {
+  font-size: 1.5rem;
+  color: #07bc0c;
 }
 
 .edit_notice {

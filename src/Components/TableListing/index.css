@@ -1,8 +1,14 @@
 h4 {
   color: #555;
   margin: 0px auto 0px;
+  padding: 5px;
+  /* width: 75%; */
+}
+
+h3 {
+  color: #555;
+  margin: 0px auto 0px;
   padding: 0px;
-  width: 75%;
 }
 
 table {

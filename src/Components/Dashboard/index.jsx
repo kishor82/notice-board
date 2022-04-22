@@ -76,14 +76,22 @@ export const Dashboard = () => {
     title: "",
     notice: "",
     department: "",
+    acknowledge: false,
   };
+  const [department, setDepartment] = useState(""); // set users department initially
   const { token, departments } = useAuth();
   const [isOpen, setIsModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [noticeData, setNoticeData] = useState(emptyNotice);
   const [noticeLists, setNoticeList] = useState([...data]);
+  const [isAcknowledgeModalOpen, setIsAcknowledgeModalOpen] = useState(false);
+
   const tootgleModal = () => {
     setIsModalOpen((value) => !value);
+  };
+
+  const onChangeDepartment = (e) => {
+    setDepartment(e.target.value);
   };
 
   const closeModal = () => {
@@ -135,6 +143,30 @@ export const Dashboard = () => {
     }
   };
 
+  const handleAcknowledge = () => {
+    const { index } = noticeData;
+    data[index] = noticeData;
+    setNoticeList(data);
+    toast.success("Notice Acknowledged");
+    toogleAcknowledgeModal();
+  };
+
+  const toogleAcknowledgeModal = () => {
+    setNoticeData(emptyNotice);
+    setIsAcknowledgeModalOpen((value) => !value);
+  };
+
+  const handleAcknowledgeClick = ({ index }) => {
+    toogleAcknowledgeModal();
+    const acknowledgedData = {
+      ...data[index],
+      acknowledge: true,
+      index,
+    };
+    console.log(data);
+    setNoticeData(acknowledgedData);
+  };
+
   return (
     <section>
       <div className="item_container">
@@ -148,22 +180,42 @@ export const Dashboard = () => {
           <div className="aside_items search_container">
             <Search />
           </div>
+          <div className="aside_items department_options">
+            <select
+              value={department}
+              onChange={onChangeDepartment}
+              name="department"
+            >
+              <option value="" disabled hidden>
+                Department
+              </option>
+              {departments.map((dept, index) => (
+                <option key={`dashboard-aside-dept-${index}`} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="grid_item">
           {/* <h3>Search Results</h3> */}
           <div className="card_container">
             <div className="cards">
-              {noticeLists.map(({ image, title, date, notice }, index) => (
-                <Card
-                  key={`card-${index}`}
-                  image={image}
-                  index={index}
-                  title={title}
-                  date={date}
-                  notice={notice}
-                  onEdit={handleEditNotice}
-                />
-              ))}
+              {noticeLists.map(
+                ({ image, title, date, notice, acknowledge }, index) => (
+                  <Card
+                    key={`card-${index}`}
+                    image={image}
+                    index={index}
+                    title={title}
+                    date={date}
+                    notice={notice}
+                    acknowledge={acknowledge}
+                    onEdit={handleEditNotice}
+                    onAcknowledge={handleAcknowledgeClick}
+                  />
+                )
+              )}
             </div>
           </div>
         </div>
@@ -183,7 +235,7 @@ export const Dashboard = () => {
                   Department
                 </option>
                 {departments.map((dept, index) => (
-                  <option key={`dept-${index}`} value={dept}>
+                  <option key={`edit-form-dept-${index}`} value={dept}>
                     {dept}
                   </option>
                 ))}
@@ -217,6 +269,15 @@ export const Dashboard = () => {
             </button>
           </form>
         </div>
+      </Modal>
+      <Modal
+        isOpen={isAcknowledgeModalOpen}
+        toggleModal={toogleAcknowledgeModal}
+        type="alert"
+        onCancel={toogleAcknowledgeModal}
+        onConfirm={handleAcknowledge}
+      >
+        <h4>Are you sure? Confirm Acknowledge!</h4>
       </Modal>
     </section>
   );
