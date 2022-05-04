@@ -7,7 +7,7 @@ const TableListing = ({ sortBy, direction = "DESC", data, columns = [] }) => {
 
   useEffect(() => {
     setTableData(SortData(data, sortBy, direction));
-  }, []);
+  }, [data, sortBy, direction]);
 
   const TableRow = ({ rowData, index }) => {
     return (

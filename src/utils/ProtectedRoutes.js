@@ -1,4 +1,4 @@
-import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import { NavBar } from "../Components/Navbar";
 export const ProtectedRoute = ({ children }) => {

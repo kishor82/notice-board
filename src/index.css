@@ -35,3 +35,11 @@ button,
 .switch {
   border-radius: 5px;
 }
+
+button:hover {
+  cursor: pointer;
+}
+
+select:hover {
+  cursor: pointer;
+}

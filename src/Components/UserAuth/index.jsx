@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useRef, useState } from "react";
 import { useAuth } from "../../utils/AuthProvider";
 import "./userAuth.css";

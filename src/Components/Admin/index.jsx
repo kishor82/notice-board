@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import TableListing from "../TableListing";

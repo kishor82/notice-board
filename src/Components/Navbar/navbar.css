@@ -137,6 +137,12 @@
   }
 }
 
+@media screen and (max-width: 280px) {
+  .nav-logo {
+    font-size: 1.5rem !important;
+  }
+}
+
 .navbar_wrapper {
   position: sticky;
   top: 0px;
