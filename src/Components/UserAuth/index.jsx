@@ -15,6 +15,7 @@ export const UserAuth = () => {
     department: "",
     password: "",
     password2: "",
+    role: "User",
   });
   const toggleForm = () => {
     const container = inputEl.current;
@@ -39,19 +40,18 @@ export const UserAuth = () => {
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     axios
-    .post("/api/login",loginData)
-    .then((res) => {
-      toast.success("Login Sucessfully");
-      onLogin();
-    })
-    .catch((error)=> {
-      toast.error("User Not Exits");
-    })
+      .post("/api/login", loginData)
+      .then((res) => {
+        toast.success("Login Sucessfully");
+        onLogin();
+      })
+      .catch((error) => {
+        toast.error("User Not Exits");
+      });
   };
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
-    
 
     axios
       .post("/api/register", registerData)

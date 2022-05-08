@@ -24,3 +24,18 @@ export const LoginRoute = ({ children }) => {
   }
   return children;
 };
+
+
+export const AdminRoute = ({ children }) => {
+  const { token } = useAuth();
+  const location = useLocation();
+  if (token && token.role !== 'Admin') {
+    return <Navigate to="/dashboard" state={{ from: location }} replace />;
+  }
+  return (
+    <>
+      <NavBar></NavBar>
+      {children}
+    </>
+  );
+};

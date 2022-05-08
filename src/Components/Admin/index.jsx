@@ -38,7 +38,7 @@ export const Admin = () => {
       const noticeList = await axios.post("/api/notice/data", {
         department: token.department,
       });
-      setNoticeCount(noticeList.data.noticeCount);
+      setNoticeCount(noticeList.data.noticeCount | 1);
       setUsers(res.data.data);
     })();
   }, []);
@@ -51,7 +51,10 @@ export const Admin = () => {
     {
       title: "Acknowledge",
       render: function (item) {
-        const percent = Math.round((item.acknowledge.length / noticeCount) * 100); // TODO : replace 1000 with actuall notice counts
+        console.log({ item });
+        const percent = Math.round(
+          (item.acknowledge.length / noticeCount) * 100
+        ); // TODO : replace 1000 with actuall notice counts
         return (
           <div
             className="balance"

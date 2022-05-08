@@ -41,9 +41,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       const companies = await getCompanies();
-      const token = await getAuthenticateUser();
+      try{
+        const token = await getAuthenticateUser();
+        setToken(token.data);
+      }catch(error){
+        setToken(null);
+      }
       const departments = await getDepartments();
-      setToken(token.data);
       setCompanies(companies.data.data);
       setDepartments(departments.data.data)
     })()

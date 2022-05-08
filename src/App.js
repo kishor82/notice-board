@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "./utils/AuthProvider";
-import { ProtectedRoute, LoginRoute } from "./utils/ProtectedRoutes";
+import { ProtectedRoute, LoginRoute, AdminRoute } from "./utils/ProtectedRoutes";
 import { Dashboard } from "./Components/Dashboard";
 import { Admin } from "./Components/Admin";
 
@@ -29,9 +29,9 @@ function App() {
           <Route
             path="admin"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <Admin />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route

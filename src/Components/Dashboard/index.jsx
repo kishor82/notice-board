@@ -144,6 +144,7 @@ export const Dashboard = () => {
   };
 
   const isWritePermission = () => {
+    console.log({token});
     return ["User/w", "Admin"].includes(token.role);
   };
 

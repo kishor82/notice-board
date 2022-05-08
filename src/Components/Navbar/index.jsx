@@ -6,7 +6,7 @@ import "./navbar.css";
 export const NavBar = () => {
   const [click, setClick] = useState(false);
   const location = useLocation();
-  const { onLogout } = useAuth();
+  const { onLogout, token } = useAuth();
   const handleClick = () => setClick(!click);
   const Close = () => setClick(false);
 
@@ -31,17 +31,19 @@ export const NavBar = () => {
                 Dashboard
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink
-                to="/admin"
-                className={(navData) =>
-                  navData.isActive ? "active" : "nav-links"
-                }
-                onClick={click ? handleClick : null}
-              >
-                Admin
-              </NavLink>
-            </li>
+            {token.role === "Admin" && (
+              <li className="nav-item">
+                <NavLink
+                  to="/admin"
+                  className={(navData) =>
+                    navData.isActive ? "active" : "nav-links"
+                  }
+                  onClick={click ? handleClick : null}
+                >
+                  Admin
+                </NavLink>
+              </li>
+            )}
             <li className="nav-item logout_item">
               <NavLink to={location.pathname} onClick={onLogout}>
                 <i className="fa fa-sign-out" aria-hidden="true"></i>
