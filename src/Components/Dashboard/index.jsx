@@ -6,6 +6,7 @@ import Card from "../Card";
 import Search from "../Search";
 import Modal from "../Modal";
 import Loader from "../Loader";
+import NoRecordFound from "../NoRecordFound";
 import "./index.css";
 
 const getNoticeList = async (department) => {
@@ -150,8 +151,7 @@ export const Dashboard = () => {
   };
 
   const isWritePermission = () => {
-    console.log({ token });
-    return ["User/w", "Admin"].includes(token.role);
+    return token && ["User/w", "Admin"].includes(token.role);
   };
 
   return (
@@ -207,19 +207,23 @@ export const Dashboard = () => {
         </div>
         <div className="grid_item">
           {/* <h3>Search Results</h3> */}
-          <div className="card_container">
-            <div className="cards">
-              {noticeLists.map((data, index) => (
-                <Card
-                  key={`card-${data._id}`}
-                  index={index}
-                  data={data}
-                  onEdit={handleEditNotice}
-                  onAcknowledge={handleAcknowledgeClick}
-                />
-              ))}
+          {noticeLists.length ? (
+            <div className="card_container">
+              <div className="cards">
+                {noticeLists.map((data, index) => (
+                  <Card
+                    key={`card-${data._id}`}
+                    index={index}
+                    data={data}
+                    onEdit={handleEditNotice}
+                    onAcknowledge={handleAcknowledgeClick}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <NoRecordFound />
+          )}
         </div>
       </div>
       {isWritePermission() && (

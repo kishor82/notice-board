@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRef, useState } from "react";
 import { useAuth } from "../../utils/AuthProvider";
+import Loader from "../Loader";
 import "./userAuth.css";
 
 export const UserAuth = () => {
@@ -17,6 +18,7 @@ export const UserAuth = () => {
     password2: "",
     role: "User",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const toggleForm = () => {
     const container = inputEl.current;
     container.classList.toggle("active");
@@ -39,28 +41,33 @@ export const UserAuth = () => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     axios
       .post("/api/login", loginData)
       .then((res) => {
         toast.success("Login Sucessfully");
         onLogin();
+        setIsLoading(false);
       })
       .catch((error) => {
         toast.error("User Not Exits");
+        setIsLoading(false);
       });
   };
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     axios
       .post("/api/register", registerData)
       .then((res) => {
         toast.success("Register Sucessfully");
         toggleForm();
+        setIsLoading(false);
       })
       .catch((error) => {
         toast.error("service error");
+        setIsLoading(false);
       });
   };
 
@@ -99,7 +106,7 @@ export const UserAuth = () => {
                 value=""
                 onClick={handleLoginSubmit}
               >
-                Login
+                {isLoading ? <Loader /> : "Login"}
               </button>
               <p className="signup">
                 Don't have an account ?
@@ -164,7 +171,7 @@ export const UserAuth = () => {
                 onChange={handleRegisterChange}
               />
               <button type="button" onClick={handleRegisterSubmit}>
-                Sign Up
+                {isLoading ? <Loader /> : "Sign Up"}
               </button>
               <p className="signup">
                 Already have an account ?

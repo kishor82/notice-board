@@ -5,7 +5,6 @@ import TableListing from "../TableListing";
 import Modal from "../Modal";
 import "./index.css";
 import { useAuth } from "../../utils/AuthProvider";
-import data from "../../MOCK_DATA.json";
 import axios from "axios";
 
 const getAllUsers = async (company) => {
@@ -34,7 +33,7 @@ export const Admin = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await getAllUsers(token.company);
+      const res = await getAllUsers(token && token.company);
       const noticeList = await axios.post("/api/notice/data", {
         department: token.department,
       });

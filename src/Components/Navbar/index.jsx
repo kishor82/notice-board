@@ -31,7 +31,7 @@ export const NavBar = () => {
                 Dashboard
               </NavLink>
             </li>
-            {token.role === "Admin" && (
+            { token && token.role === "Admin" && (
               <li className="nav-item">
                 <NavLink
                   to="/admin"
