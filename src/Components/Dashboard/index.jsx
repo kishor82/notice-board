@@ -162,7 +162,24 @@ export const Dashboard = () => {
             <div className="icon">
               <i className="fa-solid fa-user"></i>
             </div>
-            Authenticated as {token.email}, Dashboard (Protected)
+            <div className="user_items">
+              <span>
+                <i className="user_items_icon fa-solid fa-envelope"></i>
+                {token.email}
+              </span>
+              <span>
+                <i className="user_items_icon fa-solid fa-sitemap"></i>
+                {token.role}
+              </span>
+              <span>
+                <i className="user_items_icon fa-solid fa-address-card"></i>
+                {token.department}
+              </span>
+              <span>
+                <i className="user_items_icon fa-solid fa-buildings"></i>
+                {token.company}
+              </span>
+            </div>
           </div>
           <div className="aside_items search_container">
             <Search />
@@ -253,7 +270,6 @@ export const Dashboard = () => {
             </div>
             <div></div>
             <button type="button" onClick={handleSaveNotive}>
-              {/* {isEdit ? "Edit" : "Create"}{" "} */}
               {loading ? <Loader /> : isEdit ? "Edit" : "Create"}
             </button>
           </form>

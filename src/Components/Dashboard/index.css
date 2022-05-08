@@ -144,3 +144,20 @@
     right: 180px;
   }
 }
+
+.user_items {
+  display: flex;
+  flex-direction: column;
+}
+
+.user_items_icon {
+  margin-right: 20px;
+  color: #f5b921;
+}
+
+.user_items span {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 5px;
+}
