@@ -3,11 +3,12 @@ import SortData from "../../utils/sortData";
 import "./index.css";
 
 const TableListing = ({ sortBy, direction = "DESC", data, columns = [] }) => {
-  const [tableData, setTableData] = useState([]);
+  console.log("~~",{data});
+  // const [tableData, setTableData] = useState([]);
 
-  useEffect(() => {
-    setTableData(SortData(data, sortBy, direction));
-  }, [data, sortBy, direction]);
+  // useEffect(() => {
+  //   setTableData(SortData(data, sortBy, direction));
+  // }, [data,sortBy,direction]);
 
   const TableRow = ({ rowData, index }) => {
     return (
@@ -46,7 +47,7 @@ const TableListing = ({ sortBy, direction = "DESC", data, columns = [] }) => {
           </tr>
         </thead>
         <tbody id="accumTable">
-          {tableData.map((tableData, index) => (
+          {data.map((tableData, index) => (
             <TableRow
               key={`table-row-${index}`}
               rowData={tableData}

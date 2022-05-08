@@ -1,17 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import axios from "axios";
+import { toast } from "react-toastify";
 import { useRef, useState } from "react";
 import { useAuth } from "../../utils/AuthProvider";
 import "./userAuth.css";
+
 export const UserAuth = () => {
   const inputEl = useRef(null);
   const { onLogin, companies, departments } = useAuth();
-  const [loginData, setLoginData] = useState({ username: "", password: "" });
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [registerData, setRegisterData] = useState({
     email: "",
     company: "",
     department: "",
     password: "",
-    confirm_password: "",
+    password2: "",
   });
   const toggleForm = () => {
     const container = inputEl.current;
@@ -35,15 +38,32 @@ export const UserAuth = () => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    console.log({ loginData });
-    onLogin();
+    axios
+    .post("/api/login",loginData)
+    .then((res) => {
+      toast.success("Login Sucessfully");
+      onLogin();
+    })
+    .catch((error)=> {
+      toast.error("User Not Exits");
+    })
   };
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
-    console.log({ registerData });
-    toggleForm();
+    
+
+    axios
+      .post("/api/register", registerData)
+      .then((res) => {
+        toast.success("Register Sucessfully");
+        toggleForm();
+      })
+      .catch((error) => {
+        toast.error("service error");
+      });
   };
+
   return (
     <section>
       <div ref={inputEl} className="container">
@@ -59,11 +79,11 @@ export const UserAuth = () => {
               <h2>Sign In</h2>
               <input
                 type="text"
-                name="username"
+                name="email"
                 required
-                value={loginData.username}
+                value={loginData.email}
                 onChange={handleLoginChange}
-                placeholder="Username"
+                placeholder="Email"
               />
               <input
                 type="password"
@@ -109,9 +129,9 @@ export const UserAuth = () => {
                 <option value="" disabled hidden>
                   Company
                 </option>
-                {companies.map((company, index) => (
-                  <option key={index} value={company}>
-                    {company}
+                {companies.map((company) => (
+                  <option key={company._id} value={company.name}>
+                    {company.name}
                   </option>
                 ))}
               </select>
@@ -123,9 +143,9 @@ export const UserAuth = () => {
                 <option value="" disabled hidden>
                   Department
                 </option>
-                {departments.map((dept, index) => (
-                  <option key={`dept-${index}`} value={dept}>
-                    {dept}
+                {departments.map((dept) => (
+                  <option key={dept._id} value={dept.name}>
+                    {dept.name}
                   </option>
                 ))}
               </select>
@@ -138,7 +158,7 @@ export const UserAuth = () => {
               />
               <input
                 type="password"
-                name="confirm_password"
+                name="password2"
                 required
                 placeholder="Confirm Password"
                 onChange={handleRegisterChange}

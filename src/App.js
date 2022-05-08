@@ -10,6 +10,9 @@ import { AuthProvider } from "./utils/AuthProvider";
 import { ProtectedRoute, LoginRoute } from "./utils/ProtectedRoutes";
 import { Dashboard } from "./Components/Dashboard";
 import { Admin } from "./Components/Admin";
+
+
+
 function App() {
   return (
     <Router>

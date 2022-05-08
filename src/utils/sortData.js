@@ -1,5 +1,6 @@
 function SortData(newData, sortBy, direction) {
-  if (!sortBy || !newData[0][sortBy]) {
+  console.log({ newData })
+  if (!sortBy || (newData.length && !newData[0][sortBy])) {
     return newData;
   }
   return newData

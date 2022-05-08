@@ -1,90 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utils/AuthProvider";
 import Card from "../Card";
 import Search from "../Search";
 import Modal from "../Modal";
 import "./index.css";
-const data = [
-  {
-    image: "http://placeimg.com/400/200/animals",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-  {
-    image: "http://placeimg.com/400/200/tech",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-  {
-    image: "http://placeimg.com/400/200/people",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-  {
-    image: "http://placeimg.com/400/200/nature",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-  {
-    image: "http://placeimg.com/400/200/animals",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-  {
-    image: "http://placeimg.com/400/200/animals",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-  {
-    image: "http://placeimg.com/400/200/animals",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-  {
-    image: "http://placeimg.com/400/200/animals",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-  {
-    image: "http://placeimg.com/400/200/cars",
-    title: "This is title",
-    notice:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio, minus sapiente nisi laboriosam natus veniam? Expedita repudiandae dolorum, at nostrum rerum perferendis magni voluptates! Quae sed ipsa quo ex totam.",
-    date: "20/2/2022",
-  },
-];
+
+const getNoticeList = async (department) => {
+  try {
+    const data = await axios.post("/api/notice/data", { department });
+    return data;
+  } catch (error) {
+    toast.error("Something Went Wrong!");
+  }
+};
 
 export const Dashboard = () => {
+  const [department, setDepartment] = useState(""); // set users department initially
+  const { token, departments } = useAuth();
   const emptyNotice = {
     title: "",
     notice: "",
-    department: "",
+    department: token.department,
     acknowledge: false,
   };
-  const [department, setDepartment] = useState(""); // set users department initially
-  const { token, departments } = useAuth();
   const [isOpen, setIsModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [noticeData, setNoticeData] = useState(emptyNotice);
-  const [noticeLists, setNoticeList] = useState([...data]);
+  const [noticeLists, setNoticeList] = useState([]);
   const [isAcknowledgeModalOpen, setIsAcknowledgeModalOpen] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const noticeList = await getNoticeList(token.department);
+      console.log(token);
+      setDepartment(token.department);
+      console.log(noticeList);
+      setNoticeList(noticeList.data.data);
+    })();
+  }, []);
 
   const tootgleModal = () => {
     setIsModalOpen((value) => !value);
@@ -98,6 +53,7 @@ export const Dashboard = () => {
     tootgleModal();
     setTimeout(() => {
       setIsEdit(false);
+      setNoticeData(emptyNotice);
     }, 500);
   };
 
@@ -110,43 +66,57 @@ export const Dashboard = () => {
     });
   };
 
-  const handleEditNotice = (data) => {
+  const handleEditNotice = ({ data, index }) => {
     setIsEdit(true);
+    console.log(data);
     setNoticeData(() => {
       return {
         ...noticeData,
         ...data,
+        index,
       };
     });
     tootgleModal();
   };
 
-  const handleSaveNotive = () => {
+  const handleSaveNotive = async () => {
     if (isEdit) {
-      const { index } = noticeData;
-      data[index] = noticeData;
-      setNoticeList(data);
-      toast.success("Notice Edited Successfully.");
-      setTimeout(() => {
-        tootgleModal();
-        setNoticeData(emptyNotice);
-        setIsEdit(false);
-      }, 500);
+      const { index, _id } = noticeData;
+      // Call API here
+      try {
+        await axios.put(`/api/notice/${_id}`, noticeData);
+         noticeLists[index] = noticeData;
+        setNoticeList(noticeLists);
+        toast.success("Notice Edited Successfully.");
+        setTimeout(() => {
+          tootgleModal();
+          setNoticeData(emptyNotice);
+          setIsEdit(true);
+        }, 500);
+      } catch (error) {
+        console.log(error);
+        toast.error("Error Editing Notice");
+      }
     } else {
       // Call API and wait for the response
-      const newData = [noticeData, ...noticeLists];
-      setNoticeList(newData);
-      toast.success("Added Notice Successfully.");
-      setTimeout(() => {
-        tootgleModal();
-      }, 500);
+      try {
+        await axios.post("/api/add-notice", noticeData);
+        const newData = [noticeData, ...noticeLists];
+        setNoticeList(newData);
+        toast.success("Created  Notice Successfully.");
+        setTimeout(() => {
+          tootgleModal();
+        }, 500);
+      } catch (error) {
+        toast.error("Error Creating Notice");
+      }
     }
   };
 
   const handleAcknowledge = () => {
     const { index } = noticeData;
-    data[index] = noticeData;
-    setNoticeList(data);
+    noticeLists[index] = noticeData;
+    setNoticeList(noticeLists);
     toast.success("Notice Acknowledged");
     toogleAcknowledgeModal();
   };
@@ -159,11 +129,10 @@ export const Dashboard = () => {
   const handleAcknowledgeClick = ({ index }) => {
     toogleAcknowledgeModal();
     const acknowledgedData = {
-      ...data[index],
+      ...noticeLists[index],
       acknowledge: true,
       index,
     };
-    console.log(data);
     setNoticeData(acknowledgedData);
   };
 
@@ -175,7 +144,7 @@ export const Dashboard = () => {
             <div className="icon">
               <i className="fa-solid fa-user"></i>
             </div>
-            Authenticated as {token}, Dashboard (Protected)
+            Authenticated as {token.email}, Dashboard (Protected)
           </div>
           <div className="aside_items search_container">
             <Search />
@@ -189,9 +158,12 @@ export const Dashboard = () => {
               <option value="" disabled hidden>
                 Department
               </option>
-              {departments.map((dept, index) => (
-                <option key={`dashboard-aside-dept-${index}`} value={dept}>
-                  {dept}
+              {departments.map((dept) => (
+                <option
+                  key={`dashboard-aside-dept-${dept._id}`}
+                  value={dept.name}
+                >
+                  {dept.name}
                 </option>
               ))}
             </select>
@@ -201,21 +173,15 @@ export const Dashboard = () => {
           {/* <h3>Search Results</h3> */}
           <div className="card_container">
             <div className="cards">
-              {noticeLists.map(
-                ({ image, title, date, notice, acknowledge }, index) => (
-                  <Card
-                    key={`card-${index}`}
-                    image={image}
-                    index={index}
-                    title={title}
-                    date={date}
-                    notice={notice}
-                    acknowledge={acknowledge}
-                    onEdit={handleEditNotice}
-                    onAcknowledge={handleAcknowledgeClick}
-                  />
-                )
-              )}
+              {noticeLists.map((data, index) => (
+                <Card
+                  key={`card-${data._id}`}
+                  index={index}
+                  data={data}
+                  onEdit={handleEditNotice}
+                  onAcknowledge={handleAcknowledgeClick}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -230,13 +196,14 @@ export const Dashboard = () => {
           <form>
             <h2> {isEdit ? "Edit" : "Create"} Notice</h2>
             <div className="input-group">
-              <select value={""} onChange={handleEditChange} name="department">
-                <option value="" disabled hidden>
-                  Department
-                </option>
-                {departments.map((dept, index) => (
-                  <option key={`edit-form-dept-${index}`} value={dept}>
-                    {dept}
+              <select
+                value={department}
+                onChange={handleEditChange}
+                name="department"
+              >
+                {departments.map((dept) => (
+                  <option key={`edit-form-dept-${dept._id}`} value={dept.name}>
+                    {dept.name}
                   </option>
                 ))}
               </select>

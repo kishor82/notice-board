@@ -6,19 +6,42 @@ import Modal from "../Modal";
 import "./index.css";
 import { useAuth } from "../../utils/AuthProvider";
 import data from "../../MOCK_DATA.json";
+import axios from "axios";
 
+const getAllUsers = async (company) => {
+  try {
+    return await axios.post("/api/user", {
+      company,
+    });
+  } catch (error) {
+    toast.error("Something Went Wrong!");
+  }
+};
 export const Admin = () => {
   const [iseditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const { departments, permission, roles } = useAuth();
+  const { departments, permission, roles, token } = useAuth();
   const [editUser, setEditUser] = useState({
-    email: "existing@emai.com",
-    company: "Apple",
-    department: "IT",
-    status: false,
+    email: "",
+    company: "",
+    department: "",
+    status: true,
     permission: "",
     role: "User",
   });
+  const [users, setUsers] = useState([]);
+  const [noticeCount, setNoticeCount] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getAllUsers(token.company);
+      const noticeList = await axios.post("/api/notice/data", {
+        department: token.department,
+      });
+      setNoticeCount(noticeList.data.noticeCount);
+      setUsers(res.data.data);
+    })();
+  }, []);
 
   const columns = [
     { title: "Company", value: "company" },
@@ -28,7 +51,7 @@ export const Admin = () => {
     {
       title: "Acknowledge",
       render: function (item) {
-        const percent = Math.round((item.acknowledged / 1000) * 100);
+        const percent = Math.round((item.acknowledge.length / noticeCount) * 100); // TODO : replace 1000 with actuall notice counts
         return (
           <div
             className="balance"
@@ -87,36 +110,61 @@ export const Admin = () => {
     });
   }, [editUser.role]);
 
-  const handleEditClick = (e, item) => {
+  const handleEditClick = (e, item, index) => {
     e.preventDefault();
     setIsEditModalOpen((value) => !value);
     setEditUser(() => {
       return {
         ...editUser,
         ...item,
+        index,
       };
     });
   };
 
-  const handleDeleteClick = (e, item) => {
+  const handleDeleteClick = (e, item, index) => {
     e.preventDefault();
+    setEditUser(() => {
+      return {
+        ...editUser,
+        ...item,
+        index,
+      };
+    });
     toogleDeleteModal();
   };
-  const handleConfirmDelete = (e, item) => {
+  const handleConfirmDelete = async (e) => {
     e.preventDefault();
-    toast.success("User Deleted Successfully.");
+    try {
+      const { index } = editUser;
+      await axios.delete(`api/user/${editUser._id}`);
+      const updatedUsers = users.filter((_, i) => i !== index);
+      setUsers(updatedUsers);
+      toast.success("User Deleted Successfully.");
+    } catch (error) {
+      toast.error("Error Deleting User.");
+    }
     toogleDeleteModal();
   };
 
-  const handleEdit = (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
-    toast.success("User Edited Successfully.");
+    try {
+      const { index, ...payload } = editUser;
+      await axios.put(`api/user/${editUser._id}`, payload);
+      const updatedUsers = users;
+      updatedUsers[index] = payload;
+      setUsers(updatedUsers);
+      toast.success("User Edited Successfully.");
+    } catch (error) {
+      toast.error("Error Editing User.");
+    }
     setIsEditModalOpen(false);
   };
 
   return (
     <section className="admin_section">
-      <TableListing columns={columns} data={data} sortBy="company" />
+      <TableListing columns={columns} data={users} sortBy="company" />
       <Modal
         isOpen={iseditModalOpen}
         toggleModal={() => setIsEditModalOpen((value) => !value)}
@@ -153,9 +201,9 @@ export const Admin = () => {
                 <option value="" disabled hidden>
                   Department
                 </option>
-                {departments.map((dept, index) => (
-                  <option key={`dept-${index}`} value={dept}>
-                    {dept}
+                {departments.map((dept) => (
+                  <option key={`dept-${dept._id}`} value={dept.name}>
+                    {dept.name}
                   </option>
                 ))}
               </select>
