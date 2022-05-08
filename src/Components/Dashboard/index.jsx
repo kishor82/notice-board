@@ -34,9 +34,7 @@ export const Dashboard = () => {
   useEffect(() => {
     (async () => {
       const noticeList = await getNoticeList(token.department);
-      console.log(token);
       setDepartment(token.department);
-      console.log(noticeList);
       setNoticeList(noticeList.data.data);
     })();
   }, []);
@@ -85,7 +83,7 @@ export const Dashboard = () => {
       // Call API here
       try {
         await axios.put(`/api/notice/${_id}`, noticeData);
-         noticeLists[index] = noticeData;
+        noticeLists[index] = noticeData;
         setNoticeList(noticeLists);
         toast.success("Notice Edited Successfully.");
         setTimeout(() => {
@@ -113,11 +111,20 @@ export const Dashboard = () => {
     }
   };
 
-  const handleAcknowledge = () => {
-    const { index } = noticeData;
-    noticeLists[index] = noticeData;
-    setNoticeList(noticeLists);
-    toast.success("Notice Acknowledged");
+  const handleAcknowledge = async () => {
+    const { index, _id } = noticeData;
+    console.log({ noticeData });
+    try {
+      await axios.put(`/api/acknowledge-notice/${token._id}`, {
+        notice_id: _id,
+      });
+      noticeLists[index] = noticeData;
+      setNoticeList(noticeLists);
+      toast.success("Notice Acknowledged");
+    } catch (error) {
+      toast.error("Error Creating Notice");
+    }
+
     toogleAcknowledgeModal();
   };
 
@@ -134,6 +141,10 @@ export const Dashboard = () => {
       index,
     };
     setNoticeData(acknowledgedData);
+  };
+
+  const isWritePermission = () => {
+    return ["User/w", "Admin"].includes(token.role);
   };
 
   return (
@@ -154,6 +165,7 @@ export const Dashboard = () => {
               value={department}
               onChange={onChangeDepartment}
               name="department"
+              disabled={token.role !== "Admin"}
             >
               <option value="" disabled hidden>
                 Department
@@ -186,11 +198,13 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div id="add_button">
-        <button className="add_notice" onClick={tootgleModal}>
-          <i className="fa-solid fa-circle-plus"></i>
-        </button>
-      </div>
+      {isWritePermission() && (
+        <div id="add_button">
+          <button className="add_notice" onClick={tootgleModal}>
+            <i className="fa-solid fa-circle-plus"></i>
+          </button>
+        </div>
+      )}
       <Modal isOpen={isOpen} toggleModal={closeModal}>
         <div className="edit_form">
           <form>

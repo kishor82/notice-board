@@ -1,21 +1,28 @@
 import React from "react";
 import moment from "moment";
+import { useAuth } from "../../utils/AuthProvider";
 import "./index.css";
 
 const Card = ({ data, onEdit, onAcknowledge, index }) => {
   const { title, notice, acknowledge, updatedAt } = data;
+  const { token } = useAuth();
+  const isWritePermission = () => {
+    return ["User/w", "Admin"].includes(token.role);
+  };
   return (
     <div className="card" href="#">
       <span className="card-header">
-        <div className="action edit_notice">
-          <button
-            type="button"
-            onClick={() => onEdit({ data, index })}
-            className="edit_button"
-          >
-            <i className="fa-solid fa-pen-circle"></i>
-          </button>
-        </div>
+        {isWritePermission() && (
+          <div className="action edit_notice">
+            <button
+              type="button"
+              onClick={() => onEdit({ data, index })}
+              className="edit_button"
+            >
+              <i className="fa-solid fa-pen-circle"></i>
+            </button>
+          </div>
+        )}
         <span className="card-title">
           <h3>{title} </h3>
         </span>
@@ -23,7 +30,8 @@ const Card = ({ data, onEdit, onAcknowledge, index }) => {
       <span className="card-summary">{notice}</span>
       <span className="card-meta">
         <span>
-          <i class="fa-solid fa-clock"></i> &nbsp; {moment(updatedAt).format('MM/DD/YYYY')}
+          <i class="fa-solid fa-clock"></i> &nbsp;{" "}
+          {moment(updatedAt).format("MM/DD/YYYY")}
         </span>
         <span>
           {acknowledge ? (
