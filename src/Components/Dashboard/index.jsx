@@ -5,6 +5,7 @@ import { useAuth } from "../../utils/AuthProvider";
 import Card from "../Card";
 import Search from "../Search";
 import Modal from "../Modal";
+import Loader from "../Loader";
 import "./index.css";
 
 const getNoticeList = async (department) => {
@@ -30,9 +31,11 @@ export const Dashboard = () => {
   const [noticeData, setNoticeData] = useState(emptyNotice);
   const [noticeLists, setNoticeList] = useState([]);
   const [isAcknowledgeModalOpen, setIsAcknowledgeModalOpen] = useState(false);
+  const [loading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
+      console.log({ departments });
       const noticeList = await getNoticeList(token.department);
       setDepartment(token.department);
       setNoticeList(noticeList.data.data);
@@ -44,6 +47,7 @@ export const Dashboard = () => {
   };
 
   const onChangeDepartment = (e) => {
+    console.log({ Data: e.target.value });
     setDepartment(e.target.value);
   };
 
@@ -78,6 +82,7 @@ export const Dashboard = () => {
   };
 
   const handleSaveNotive = async () => {
+    setIsLoading(true);
     if (isEdit) {
       const { index, _id } = noticeData;
       // Call API here
@@ -109,6 +114,7 @@ export const Dashboard = () => {
         toast.error("Error Creating Notice");
       }
     }
+    setIsLoading(false);
   };
 
   const handleAcknowledge = async () => {
@@ -144,7 +150,7 @@ export const Dashboard = () => {
   };
 
   const isWritePermission = () => {
-    console.log({token});
+    console.log({ token });
     return ["User/w", "Admin"].includes(token.role);
   };
 
@@ -212,7 +218,7 @@ export const Dashboard = () => {
             <h2> {isEdit ? "Edit" : "Create"} Notice</h2>
             <div className="input-group">
               <select
-                value={department}
+                value={noticeData.department}
                 onChange={handleEditChange}
                 name="department"
               >
@@ -247,7 +253,8 @@ export const Dashboard = () => {
             </div>
             <div></div>
             <button type="button" onClick={handleSaveNotive}>
-              {isEdit ? "Edit" : "Create"}
+              {/* {isEdit ? "Edit" : "Create"}{" "} */}
+              {loading ? <Loader /> : isEdit ? "Edit" : "Create"}
             </button>
           </form>
         </div>

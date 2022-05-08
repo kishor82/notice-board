@@ -15,7 +15,7 @@ const getCompanies = async () => {
    return await axios.get("/api/company/data");
    
   } catch (error) {
-    toast.error("Something Went Wrong!");
+    // toast.error("Something Went Wrong!");
   }
 }
 
@@ -24,7 +24,7 @@ const getDepartments = async () => {
     const data = await axios.get("/api/department/data");
     return data;
   } catch (error) {
-    toast.error("something Wend Wrong!");
+    // toast.error("something Wend Wrong!");
   }
 }
 
